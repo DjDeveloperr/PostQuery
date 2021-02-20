@@ -2,6 +2,10 @@
 
 An easy to use Query Client for Deno Postgres.
 
+## Docs
+
+Docs are available [here](https://doc.deno.land/https/deno.land/x/postquery/mod.ts).
+
 ## Usage
 
 ```ts
@@ -39,7 +43,8 @@ await users.where({
   id: 2
 }).select("name"); // { name: "User 2" }
 
-await users.where().limit(2).select(); // [ { id: 1, name: "User 1" }, { id: 2, name: "User 2" } ]
+await users.where().limit(2).select(); 
+// [ { id: 1, name: "User 1" }, { id: 2, name: "User 2" } ]
 
 await users.where({ id: 1 }).delete();
 
