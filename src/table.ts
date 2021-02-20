@@ -8,13 +8,16 @@ import {
 } from "./types.ts";
 import { QueryWhere } from "./where.ts";
 
+/** Represents a Postgres Table, basically `FROM <name>` part */
 export class QueryTable<T extends Record<string, unknown> = QueryCondition> {
   constructor(public client: QueryClient, public name: string) {}
 
+  /** Start building WHERE claus (and more) on this table */
   where(condition: Partial<T> = {}) {
     return new QueryWhere<T>(this.client, this.name, condition);
   }
 
+  /** Create table with current name and given options (columns) */
   async create(options: TableOptions, mode?: CreateTableMode) {
     if (mode === CreateTableMode.DropIfExists)
       await this.client.query(`DROP TABLE IF EXISTS ${unsketchify(this.name)}`);
@@ -38,6 +41,7 @@ export class QueryTable<T extends Record<string, unknown> = QueryCondition> {
     return this;
   }
 
+  /** Used to DROP the table */
   async drop(ifExists?: boolean) {
     await this.client.query(
       `DROP TABLE${ifExists ? " IF EXISTS" : ""} ${unsketchify(this.name)}`
@@ -45,6 +49,7 @@ export class QueryTable<T extends Record<string, unknown> = QueryCondition> {
     return this;
   }
 
+  /** Used to insert rows into the table */
   async insert<T2 extends Record<string, unknown> = T>(...data: T2[]) {
     if (!data.length) return this;
     const cols: string[] = [];
@@ -78,17 +83,20 @@ export class QueryTable<T extends Record<string, unknown> = QueryCondition> {
     return this;
   }
 
+  /** Used to SELECT all rows from the table */
   async select<T2 extends Record<string, unknown> = T>(
     ...what: Array<string>
   ): Promise<T2[]> {
     return await this.where({}).select<T2>(...what);
   }
 
+  /** Used to DELETE all rows from the table */
   async delete() {
     await this.where({}).delete();
     return this;
   }
 
+  /** Used to UPDATE all rows in the table */
   async update<T2 extends Record<string, unknown> = T>(what: Partial<T2>) {
     await this.where({}).update(what);
     return this;

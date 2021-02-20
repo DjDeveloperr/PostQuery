@@ -2,6 +2,7 @@ import type { QueryClient } from "./client.ts";
 import { OrderBy, QueryCondition } from "./types.ts";
 import { unsketchify } from "./utils.ts";
 
+/** Represents a WHERE claus */
 export class QueryWhere<T extends Record<string, unknown> = QueryCondition> {
   selectLimit?: number;
   selectOffset?: number;
@@ -15,27 +16,32 @@ export class QueryWhere<T extends Record<string, unknown> = QueryCondition> {
     public condition: Partial<T> = {}
   ) {}
 
+  /** Set LIMIT of rows to query */
   limit(num: number) {
     this.selectLimit = num;
     return this;
   }
 
+  /** Set OFFSET of rows in LIMIT to query */
   offset(num: number) {
     this.selectOffset = num;
     return this;
   }
 
+  /** Used to create a column alias, <Where>.with("actual_name").as("alias_name") */
   with(what: string) {
     if (this.#with !== undefined) throw new Error("as() not used yet");
     this.#with = what;
     return this;
   }
 
+  /** Used to set ORDER BY claus */
   order(by: OrderBy | string) {
     this.orderBy = by;
     return this;
   }
 
+  /** Used to create a column alias, <Where>.with("actual_name").as("alias_name") */
   as(alias: string) {
     if (this.#with === undefined)
       throw new Error("with() not used before as()");
@@ -44,6 +50,7 @@ export class QueryWhere<T extends Record<string, unknown> = QueryCondition> {
     return this;
   }
 
+  /** Used to build the SQL query for current WHERE claus */
   make() {
     return {
       sql:
@@ -61,6 +68,7 @@ export class QueryWhere<T extends Record<string, unknown> = QueryCondition> {
     };
   }
 
+  /** Used to execute SELECT on current clauses. */
   async select<T2 extends Record<string, unknown> = T>(
     ...what: Array<string>
   ): Promise<T2[]> {
@@ -96,6 +104,7 @@ export class QueryWhere<T extends Record<string, unknown> = QueryCondition> {
     );
   }
 
+  /** Used to execute UPDATE on current WHERE claus */
   async update<T2 extends Record<string, unknown> = T>(what: Partial<T2>) {
     const make = this.make();
     await this.client.query<T2>(
@@ -107,6 +116,7 @@ export class QueryWhere<T extends Record<string, unknown> = QueryCondition> {
     return this;
   }
 
+  /** Used to execute DELETE on current WHERE claus */
   async delete() {
     const make = this.make();
     await this.client.query<T>(
