@@ -29,8 +29,8 @@ export class QueryTable<T extends Record<string, unknown> = QueryCondition> {
           `${unsketchify(e[0])} ${
             typeof e[1] === "string"
               ? e[1]
-              : `${e[1].type}${e[1].array ? "[]" : ""}${
-                  e[1].length ? `(${e[1].length})` : ""
+              : `${e[1].type}${e[1].length ? `(${e[1].length})` : ""}${
+                  e[1].array ? "[]" : ""
                 }${e[1].nullable === false ? ` NOT NULL` : ""}${
                   e[1].constrait ? ` ${e[1].constrait}` : ""
                 }`
