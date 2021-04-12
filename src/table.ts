@@ -32,7 +32,7 @@ export class QueryTable<T extends Record<string, unknown> = QueryCondition> {
               : `${e[1].type}${e[1].length ? `(${e[1].length})` : ""}${
                   e[1].array ? "[]" : ""
                 }${e[1].nullable === false ? ` NOT NULL` : ""}${
-                  e[1].constrait ? ` ${e[1].constrait}` : ""
+                  e[1].constraint ? ` ${e[1].constraint}` : ""
                 }`
           }`
       )
