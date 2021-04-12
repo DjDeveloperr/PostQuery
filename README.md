@@ -9,7 +9,7 @@ Docs are available [here](https://doc.deno.land/https/deno.land/x/postquery/mod.
 ## Usage
 
 ```ts
-import { QueryClient, DataType, CreateTableMode } from "https://deno.land/x/postquery/mod.ts";
+import { QueryClient, DataType, CreateTableMode, Constraint } from "https://deno.land/x/postquery/mod.ts";
 
 const client = new QueryClient(/* Connection URI or Connection Object */);
 const users = client.table<{
@@ -20,7 +20,7 @@ const users = client.table<{
 await users.create({
   id: {
     type: DataType.Integer,
-    primaryKey: true,
+    constraint: Constraint.PrimaryKey,
   },
   name: {
     type: DataType.VarChar,

@@ -39,7 +39,7 @@ export interface TableColumn {
   type: DataType;
   array?: boolean;
   length?: number;
-  constrait?: Constraint;
+  constraint?: Constraint;
   nullable?: boolean;
 }
 
