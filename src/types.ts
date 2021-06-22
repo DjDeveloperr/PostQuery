@@ -15,6 +15,7 @@ export enum DataType {
   Interval = "INTERVAL",
   Time = "TIME",
   UUID = "UUID",
+  ByteArray = "BYTEA",
   HStore = "HSTORE",
   Box = "BOX",
   Line = "LINE",
