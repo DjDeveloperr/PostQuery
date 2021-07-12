@@ -120,7 +120,7 @@ export class QueryWhere<T extends Record<string, unknown> = QueryCondition> {
   async delete() {
     const make = this.make();
     await this.client.query<T>(
-      `DELETE FROM ${unsketchify(this.table)} ${this.make()}`,
+      `DELETE FROM ${unsketchify(this.table)} ${this.make().sql}`,
       make.params
     );
     return this;
